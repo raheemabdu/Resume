@@ -11,7 +11,7 @@ const Resume = () => {
 
     const opt = {
       margin: 0,
-      filename: "Dawood-Butt-Resume.pdf",
+      filename: "abdul-Resume.pdf",
       image: { type: "jpeg", quality: 1 },
       html2canvas: {
         scale: 2,

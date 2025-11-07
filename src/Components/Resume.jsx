@@ -5,9 +5,12 @@ import html2pdf from "html2pdf.js";
 const Resume = () => {
   const resumeRef = useRef();
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const element = resumeRef.current;
     if (!element) return;
+
+    // ✅ Wait for fonts to load completely before capturing
+    await document.fonts.ready;
 
     const opt = {
       margin: 0,
@@ -17,13 +20,21 @@ const Resume = () => {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
+        letterRendering: true, // ✅ Important: fix for missing text
         ignoreElements: (el) => {
-          // Agar koi oklch color milta hai to skip kare
           const style = window.getComputedStyle(el);
-          return style.color.includes("oklch") || style.backgroundColor.includes("oklch");
+          return (
+            style.color.includes("oklch") ||
+            style.backgroundColor.includes("oklch")
+          );
         },
       },
-      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+        textRenderingMode: "geometricPrecision", // ✅ better font rendering
+      },
     };
 
     try {
@@ -53,38 +64,57 @@ const Resume = () => {
         <h2 className="text-center text-gray-600 mb-6">Software Engineer</h2>
 
         <section className="mb-5">
-          <strong>
-          <h3 className="font-semibold text-lg mb-2 text-blue-700">Profile</h3>
-          </strong>
+          <h3
+            className="text-lg mb-2"
+            style={{ fontWeight: "600", color: "#1d4ed8" }}
+          >
+            Profile
+          </h3>
           <p>
             Passionate and detail-oriented Frontend Developer focused on
             building responsive, clean, and visually appealing web experiences.
           </p>
         </section>
 
-           <section className="mb-6">
-          <h3 className="font-semibold text-lg mb-2 text-blue-700">Education</h3>
-          <p className="font-medium">BS in Computer Science – University of Karachi</p>
+        <section className="mb-6">
+          <h3
+            className="text-lg mb-2"
+            style={{ fontWeight: "600", color: "#1d4ed8" }}
+          >
+            Education
+          </h3>
+          <p className="font-medium">
+            BS in Computer Science – University of Karachi
+          </p>
           <p className="text-sm text-gray-600">Expected Graduation: 2026</p>
         </section>
 
-          <section className="mb-6">
-          <h3 className="font-semibold text-lg mb-2 text-blue-700">Projects</h3>
+        <section className="mb-6">
+          <h3
+            className="text-lg mb-2"
+            style={{ fontWeight: "600", color: "#1d4ed8" }}
+          >
+            Projects
+          </h3>
           <ul className="list-disc list-inside">
             <li>
-              {/* <strong> rsume</strong> */}
-              <strong>Resume Builder App:</strong> Built using React + Tailwind, allows
-              users to create and download PDF resumes dynamically.
+              <strong>Resume Builder App:</strong> Built using React + Tailwind,
+              allows users to create and download PDF resumes dynamically.
             </li>
             <li>
-              <strong>Portfolio Website:</strong> Designed a personal portfolio with
-              smooth animations and responsive layout.
+              <strong>Portfolio Website:</strong> Designed a personal portfolio
+              with smooth animations and responsive layout.
             </li>
           </ul>
         </section>
 
         <section className="mb-5">
-          <h3 className="font-semibold text-lg mb-2 text-blue-700">Skills</h3>
+          <h3
+            className="text-lg mb-2"
+            style={{ fontWeight: "600", color: "#1d4ed8" }}
+          >
+            Skills
+          </h3>
           <ul className="list-disc list-inside">
             <li>React + Vite</li>
             <li>Tailwind CSS</li>
@@ -94,7 +124,12 @@ const Resume = () => {
         </section>
 
         <section>
-          <h3 className="font-semibold text-lg mb-2 text-blue-700">Contact</h3>
+          <h3
+            className="text-lg mb-2"
+            style={{ fontWeight: "600", color: "#1d4ed8" }}
+          >
+            Contact
+          </h3>
           <p>Email: abdul@example.com</p>
           <p>Phone: +92-300-0000000</p>
         </section>
@@ -103,4 +138,4 @@ const Resume = () => {
   );
 };
 
-export default Resume;  
+export default Resume;
